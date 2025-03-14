@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "dev:server": "json-server server.json -p 3333 -w -d 500",
+    "dev:server": "json-server server.json -p 3333 -w -d 500"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.6",
