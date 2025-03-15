@@ -1,5 +1,6 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState, useCallback } from "react";
 import { api } from "../lib/axios";
+import { createContext } from "use-context-selector";
 
 interface Transaction {
     id: number;
@@ -33,7 +34,7 @@ interface TransactionsProviderProps {
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
 
-    async function fetchTransactions(query?: string) {
+    const fetchTransactions = useCallback(async (query?: string) => {
         /*
         Forma de fazer com fetch API
             const url = new URL('http://localhost:3000/transactions')
@@ -56,9 +57,9 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
         })
 
         setTransactions(response.data);
-    }
+    }, [])
 
-    async function createTransaction(data: CreateTransactionInput) {
+    const createTransaction = useCallback(async (data: CreateTransactionInput) => {
         const { description, price, category, type } = data;
 
         const response = await api.post('transactions', {
@@ -70,11 +71,11 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
         });
 
         setTransactions(state => [response.data, ...state])
-    }
+    }, [])
 
     useEffect(() => {
         fetchTransactions()
-    }, []);
+    }, [fetchTransactions]);
 
     return (
         <TransactionsContext.Provider value={{
